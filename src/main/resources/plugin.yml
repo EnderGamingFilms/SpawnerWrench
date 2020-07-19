@@ -1,0 +1,19 @@
+name: SpawnerWrench
+version: ${project.version}
+main: me.endergamingfilms.spawnerwrench.SpawnerWrench
+author: EnderGamingFilms
+api-version: 1.13
+depend: [WildStacker]
+commands:
+  wrench:
+permissions:
+  spawnerwrench.get:
+    default: op
+  spawnerwrench.give:
+    default: op
+  spawnerwrench.*:
+    default: op
+    children:
+      spawnerwrench.get: true
+      spawnerwrench.give: true
+
