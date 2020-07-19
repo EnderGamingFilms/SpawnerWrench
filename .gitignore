@@ -111,3 +111,24 @@ buildNumber.properties
 
 # Common working directory
 run/
+
+dynamicmarketplace.iml
+
+.classpath/
+
+.project/
+
+.idea/
+
+*.class
+
+target/
+
+*.iml
+
+.settings/
+
+.classpath
+
+.project
+
