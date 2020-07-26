@@ -152,8 +152,7 @@ public final class SpawnerWrench extends JavaPlugin implements Listener, Command
         if (player.getItemInHand().getItemMeta() == null) return;
         // Only Check Right Hand (main hand)
         PersistentDataContainer container = player.getItemInHand().getItemMeta().getPersistentDataContainer();
-        if (Objects.equals(container.get(key, PersistentDataType.STRING),
-                spawnerWrenchItem.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING))) {
+        if (container.has(key, PersistentDataType.STRING)) {
             if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
                 Block clickedBlock = event.getClickedBlock();
                 if (clickedBlock != null && clickedBlock.getType() == Material.SPAWNER) {
@@ -193,8 +192,7 @@ public final class SpawnerWrench extends JavaPlugin implements Listener, Command
             if (stack != null && stack.getType() != Material.AIR) {
                 if (stack.getItemMeta() != null) {
                     // If the wrench item is found
-                    if (Objects.equals(stack.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING),
-                            spawnerWrenchItem.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING))) {
+                    if (stack.getItemMeta().getPersistentDataContainer().has(key, PersistentDataType.STRING)) {
                         if (stack.getAmount() > 1) { // Case 1 - wrench item is in stack > 1
                             stack.setAmount(stack.getAmount() - 1);
                             return true;

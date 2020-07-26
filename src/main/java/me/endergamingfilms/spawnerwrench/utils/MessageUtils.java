@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 public class MessageUtils {
     private final SpawnerWrench plugin;
-    public String prefix = "&6&lWrench &7";
+    public String prefix = "&6Wrench &7";
     public final static String NL = "\n";
     public final static String SPACE = " ";
 
