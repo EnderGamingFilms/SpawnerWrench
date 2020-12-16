@@ -14,7 +14,7 @@ public class Responses {
 
     /** |-------------- Basic Responses --------------| */
     public String noPerms() {
-        return plugin.messageUtils.format("&7Unknown Command", false);
+        return plugin.messageUtils.format("&cYou don't have permission to do this!", false);
     }
 
     public String nonPlayer() {

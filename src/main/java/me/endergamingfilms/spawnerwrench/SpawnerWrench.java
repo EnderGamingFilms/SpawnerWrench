@@ -1,14 +1,11 @@
 package me.endergamingfilms.spawnerwrench;
 
-import com.bgsoftware.wildstacker.api.objects.StackedSpawner;
 import com.bgsoftware.wildstacker.api.WildStackerAPI;
+import com.bgsoftware.wildstacker.api.objects.StackedSpawner;
 import me.endergamingfilms.spawnerwrench.utils.MessageUtils;
 import me.endergamingfilms.spawnerwrench.utils.Protections;
 import me.endergamingfilms.spawnerwrench.utils.Responses;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
@@ -18,7 +15,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -32,7 +28,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collections;
-import java.util.Objects;
 
 public final class SpawnerWrench extends JavaPlugin implements Listener, CommandExecutor {
     public final MessageUtils messageUtils = new MessageUtils(this);
@@ -77,7 +72,7 @@ public final class SpawnerWrench extends JavaPlugin implements Listener, Command
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length > 1 && args[0].equalsIgnoreCase("give")) {
+        if (args.length > 1 && args[0].equalsIgnoreCase("give") && !(sender instanceof Player)) {
             if (getServer().getPlayer(args[1]) != null) {
                 Player passPlayer = getServer().getPlayer(args[1]);
                 if (args.length > 2) { // Give player multiple wrenches
@@ -143,17 +138,22 @@ public final class SpawnerWrench extends JavaPlugin implements Listener, Command
 
     @EventHandler
     void onBlockInteract(PlayerInteractEvent event) {
-        // Only Run Code for main hand
-        if(event.getHand() == EquipmentSlot.OFF_HAND) return;
-        // If no item in hand then return
+        // Catch all null items
+        if (event.getItem() == null) return;
+        // If item is in off hand
+        if (event.getHand() == EquipmentSlot.OFF_HAND) {
+            if (event.getItem().getItemMeta() == null) return;
+            PersistentDataContainer container = event.getItem().getItemMeta().getPersistentDataContainer();
+            if (container.has(key, PersistentDataType.STRING));
+                event.setCancelled(true);
+            return;
+        }
         Player player = event.getPlayer();
-        if ((player.getItemInHand().getType() == Material.AIR)) return;
         // If the item has no item meta then return
-        if (player.getItemInHand().getItemMeta() == null) return;
-        // Only Check Right Hand (main hand)
-        PersistentDataContainer container = player.getItemInHand().getItemMeta().getPersistentDataContainer();
+        if (event.getItem().getItemMeta() == null) return;
+        PersistentDataContainer container = event.getItem().getItemMeta().getPersistentDataContainer();
         if (container.has(key, PersistentDataType.STRING)) {
-            if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
                 Block clickedBlock = event.getClickedBlock();
                 if (clickedBlock != null && clickedBlock.getType() == Material.SPAWNER) {
                     // Check if clicked block is protected
